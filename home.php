@@ -1,15 +1,10 @@
 <?php
-// Start session FIRST
+@include 'config.php';
 session_start();
+// ini_set('display_errors', 1);
+// error_reporting(E_ALL);
 
-// Enable error reporting during development (remove in production)
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
 
-// Load database config
-require_once 'config.php';
-
-// Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit();
@@ -17,30 +12,6 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 
 $message = [];
-
-// Handle "Add to Wishlist"
-if (isset($_POST['add_to_wishlist'])) {
-    $product_id = mysqli_real_escape_string($conn, $_POST['product_id']);
-    $product_name = mysqli_real_escape_string($conn, $_POST['product_name']);
-    $product_price = mysqli_real_escape_string($conn, $_POST['product_price']);
-    $product_image = mysqli_real_escape_string($conn, $_POST['product_image']);
-
-    $check_wishlist = mysqli_query($conn, "SELECT * FROM `wishlist` WHERE name = '$product_name' AND user_id = '$user_id'");
-    $check_cart = mysqli_query($conn, "SELECT * FROM `cart` WHERE name = '$product_name' AND user_id = '$user_id'");
-
-    if (mysqli_num_rows($check_wishlist) > 0) {
-        $message[] = 'Already added to wishlist';
-    } elseif (mysqli_num_rows($check_cart) > 0) {
-        $message[] = 'Already added to cart';
-    } else {
-        $insert = mysqli_query($conn, "INSERT INTO `wishlist` (user_id, pid, name, price, image) VALUES ('$user_id', '$product_id', '$product_name', '$product_price', '$product_image')");
-        if ($insert) {
-            $message[] = 'Product added to wishlist';
-        } else {
-            $message[] = 'Wishlist error: ' . mysqli_error($conn);
-        }
-    }
-}
 
 
 if (isset($_POST['add_to_cart'])) {
@@ -104,8 +75,6 @@ if (!$select_products) {
       <a href="about.php" class="btn">discover more</a>
    </div>
 </section>
-
-<!-- Categories Section -->
 <section class="categories">
    <h1 class="title">shop by category</h1>
    <div class="box-container">
@@ -125,7 +94,6 @@ if (!$select_products) {
    </div>
 </section>
 
-<!-- Products Section -->
 <section class="products">
    <h1 class="title">latest products</h1>
    <div class="box-container">

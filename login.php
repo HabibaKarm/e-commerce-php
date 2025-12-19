@@ -6,11 +6,8 @@ session_start();
 
 if(isset($_POST['submit'])){
 
-   $filter_email = filter_var($_POST['email'], FILTER_SANITIZE_STRING);
-   $email = mysqli_real_escape_string($conn, $filter_email);
-   $filter_pass = filter_var($_POST['pass'], FILTER_SANITIZE_STRING);
-   $pass = mysqli_real_escape_string($conn, md5($filter_pass));
-
+   $email = $_POST['email'];
+   $pass = md5($_POST['pass']);
    $select_users = mysqli_query($conn, "SELECT * FROM `users` WHERE email = '$email' AND password = '$pass'") or die('query failed');
 
 
@@ -32,8 +29,6 @@ if(isset($_POST['submit'])){
          $_SESSION['user_id'] = $row['id'];
          header('location:home.php');
 
-      }else{
-         $message[] = 'no user found!';
       }
 
    }else{

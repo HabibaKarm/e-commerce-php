@@ -11,7 +11,6 @@ if (!isset($admin_id)) {
    exit();
 }
 
-// ✅ Safely fetch categories without mysqli_fetch_all()
 $categories = [];
 $select_categories = mysqli_query($conn, "SELECT * FROM `categories` ORDER BY name ASC");
 if ($select_categories && mysqli_num_rows($select_categories) > 0) {
@@ -123,7 +122,6 @@ if (isset($_GET['delete'])) {
    </form>
 </section>
 
-<!-- Product List -->
 <section class="show-products">
    <div class="box-container">
       <?php
