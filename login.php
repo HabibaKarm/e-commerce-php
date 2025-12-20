@@ -29,6 +29,9 @@ if(isset($_POST['submit'])){
          $_SESSION['user_id'] = $row['id'];
          header('location:home.php');
 
+      }else{
+
+         $message[] = 'no user found!';
       }
 
    }else{

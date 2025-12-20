@@ -1,5 +1,5 @@
 <?php
-require_once 'config.php';
+include 'config.php';
 session_start();
 
 if (!isset($_SESSION['user_id'])) {
@@ -45,6 +45,7 @@ if (!$select_products || mysqli_num_rows($select_products) === 0) {
     die('<p class="empty">Product not found!</p>');
 }
 $fetch_products = mysqli_fetch_assoc($select_products);
+
 ?>
 
 <!DOCTYPE html>
@@ -67,7 +68,7 @@ $fetch_products = mysqli_fetch_assoc($select_products);
     <h1 class="title">product details</h1>
 
     <form action="" method="POST">
-        <img src="uploaded_img/<?= htmlspecialchars($fetch_products['image']); ?>" alt="" class="image">
+        <img src="uploaded_img/<?= htmlspecialchars($fetch_products['image']); ?>" alt="" class="image"  width="60%">
         <div class="name"><?= htmlspecialchars($fetch_products['name']); ?></div>
         <div class="price">$<?= $fetch_products['price']; ?>/-</div>
         <div class="details"><?= nl2br(htmlspecialchars($fetch_products['details'])); ?></div>
@@ -75,7 +76,7 @@ $fetch_products = mysqli_fetch_assoc($select_products);
         <input type="hidden" name="product_id" value="<?= $fetch_products['id']; ?>">
         <input type="hidden" name="product_name" value="<?= htmlspecialchars($fetch_products['name']); ?>">
         <input type="hidden" name="product_price" value="<?= $fetch_products['price']; ?>">
-        <input type="hidden" name="product_image" value="<?= htmlspecialchars($fetch_products['image']); ?>">
+        <input type="hidden" name="product_image" value="<?= htmlspecialchars($fetch_products['image']); ?>>
         <input type="submit" value="add to cart" name="add_to_cart" class="btn">
     </form>
 

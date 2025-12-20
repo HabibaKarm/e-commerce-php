@@ -1,10 +1,6 @@
 <?php
 @include 'config.php';
 session_start();
-// ini_set('display_errors', 1);
-// error_reporting(E_ALL);
-
-
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit();
@@ -28,8 +24,6 @@ if (isset($_POST['add_to_cart'])) {
         $message[] = 'Already added to cart';
     } else {
 
-        mysqli_query($conn, "DELETE FROM `wishlist` WHERE name = '$product_name' AND user_id = '$user_id'");
-
         $insert = mysqli_query($conn, "INSERT INTO `cart` (user_id, pid, name, price, quantity, image) VALUES ('$user_id', '$product_id', '$product_name', '$product_price', '$product_quantity', '$product_image')");
         if ($insert) {
             $message[] = 'Product added to cart';
@@ -40,16 +34,9 @@ if (isset($_POST['add_to_cart'])) {
 }
 
 
-$select_categories = mysqli_query($conn, "SELECT * FROM `categories` ORDER BY name ASC");
-if (!$select_categories) {
-    die('Category fetch error: ' . mysqli_error($conn));
-}
+$select_categories = mysqli_query($conn, "SELECT * FROM `categories`");
+$select_products = mysqli_query($conn, "SELECT * FROM `products` limit 6" );
 
-
-$select_products = mysqli_query($conn, "SELECT * FROM `products` LIMIT 6");
-if (!$select_products) {
-    die('Product fetch error: ' . mysqli_error($conn));
-}
 ?>
 
 <!DOCTYPE html>
@@ -60,7 +47,7 @@ if (!$select_products) {
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Home</title>
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-   <link rel="stylesheet" href="css/style.css"> <!-- ✅ Use forward slash! -->
+   <link rel="stylesheet" href="css/style.css"> 
 </head>
 <body>
    
@@ -78,6 +65,7 @@ if (!$select_products) {
 <section class="categories">
    <h1 class="title">shop by category</h1>
    <div class="box-container">
+
       <?php if (mysqli_num_rows($select_categories) > 0): ?>
          <?php while ($category = mysqli_fetch_assoc($select_categories)): ?>
             <a href="shop.php?category=<?php echo $category['id']; ?>" class="box">
